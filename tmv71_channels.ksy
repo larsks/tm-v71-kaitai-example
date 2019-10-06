@@ -47,6 +47,9 @@ instances:
 
 types:
   tables:
+    doc: |
+      This is a value-only collection of tables used to map
+      numeric constants in the channel data into actual values.
     instances:
       step_size:
         value: >-
