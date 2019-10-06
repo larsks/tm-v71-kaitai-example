@@ -9,6 +9,12 @@ if parse_version(ks_version) < parse_version('0.7'):
     raise Exception("Incompatible Kaitai Struct Python API: 0.7 or later is required, but you have %s" % (ks_version))
 
 class Tmv71Channels(KaitaiStruct):
+    """This Kaitai Struct will parse a list of channels from a memory dump from
+    a TM-V71A radio.  You can produce such a dump using tm-v71-tools
+    (https://github.com/larsks/tm-v71-tools):
+    
+        tmv71 memory read -o memdump.bin
+    """
 
     class ChannelBand(Enum):
         vhf = 5

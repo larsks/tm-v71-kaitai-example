@@ -1,4 +1,11 @@
 ---
+doc: |
+  This Kaitai Struct will parse a list of channels from a memory dump from
+  a TM-V71A radio.  You can produce such a dump using tm-v71-tools
+  (https://github.com/larsks/tm-v71-tools):
+
+      tmv71 memory read -o memdump.bin
+
 meta:
   id: tmv71_channels
   title: "TMV71 Channels"
@@ -16,6 +23,11 @@ instances:
     type: channel(_index)
     repeat: expr
     repeat-expr: 1000
+
+  # Names in the tm-v71a are padded with `0xff` bytes up to their
+  # maxium length. By specifying both `size` and `terminator` we
+  # consume the correct number of bytes and return a string that
+  # does not contain the padding bytes.
   channel_names:
     pos: 0x5800
     type: str
@@ -24,6 +36,7 @@ instances:
     size: 8
     repeat: expr
     repeat-expr: 1000
+
   channel_extended_flags:
     pos: 0xe00
     type: channel_extended_flags
@@ -50,8 +63,12 @@ types:
             0xffffffff: empty_channel
             _: channel_fields
     instances:
+      # The `name` attribute maps to the appropriate index in the
+      # top-level `channel_names` array.
       name:
         value: _root.channel_names[number]
+      # The `extended_flags` attribute maps to the appropriate index
+      # in the top-level `channel_extended_flags` array.
       extended_flags:
         value: _root.channel_extended_flags[number]
   channel_flags:
