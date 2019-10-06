@@ -141,14 +141,14 @@ class Tmv71Channels(KaitaiStruct):
             self._read()
 
         def _read(self):
-            self.rx_step = self._io.read_u1()
+            self.rx_step_raw = self._io.read_u1()
             self.mod = self._root.Modulation(self._io.read_u1())
             self.flags = self._root.ChannelFlags(self._io, self, self._root)
-            self.tone_frequency = self._io.read_u1()
-            self.ctcss_frequency = self._io.read_u1()
-            self.dcs_frequency = self._io.read_u1()
+            self.tone_frequency_raw = self._io.read_u1()
+            self.ctcss_frequency_raw = self._io.read_u1()
+            self.dcs_code_raw = self._io.read_u1()
             self.tx_offset_raw = self._io.read_u4le()
-            self.tx_step = self._io.read_u1()
+            self.tx_step_raw = self._io.read_u1()
             self.padding = self._io.read_u1()
 
         @property
@@ -168,12 +168,44 @@ class Tmv71Channels(KaitaiStruct):
             return self._m_rx_freq if hasattr(self, '_m_rx_freq') else None
 
         @property
+        def tone_frequency(self):
+            if hasattr(self, '_m_tone_frequency'):
+                return self._m_tone_frequency if hasattr(self, '_m_tone_frequency') else None
+
+            self._m_tone_frequency = self._root.tables.tone_frequency[self.tone_frequency_raw]
+            return self._m_tone_frequency if hasattr(self, '_m_tone_frequency') else None
+
+        @property
+        def dcs_code(self):
+            if hasattr(self, '_m_dcs_code'):
+                return self._m_dcs_code if hasattr(self, '_m_dcs_code') else None
+
+            self._m_dcs_code = self._root.tables.dcs_code[self.dcs_code_raw]
+            return self._m_dcs_code if hasattr(self, '_m_dcs_code') else None
+
+        @property
         def tx_offset(self):
             if hasattr(self, '_m_tx_offset'):
                 return self._m_tx_offset if hasattr(self, '_m_tx_offset') else None
 
             self._m_tx_offset = (self.tx_offset_raw / 1000000.0)
             return self._m_tx_offset if hasattr(self, '_m_tx_offset') else None
+
+        @property
+        def rx_step(self):
+            if hasattr(self, '_m_rx_step'):
+                return self._m_rx_step if hasattr(self, '_m_rx_step') else None
+
+            self._m_rx_step = self._root.tables.step_size[self.rx_step_raw]
+            return self._m_rx_step if hasattr(self, '_m_rx_step') else None
+
+        @property
+        def ctcss_frequency(self):
+            if hasattr(self, '_m_ctcss_frequency'):
+                return self._m_ctcss_frequency if hasattr(self, '_m_ctcss_frequency') else None
+
+            self._m_ctcss_frequency = self._root.tables.tone_frequency[self.ctcss_frequency_raw]
+            return self._m_ctcss_frequency if hasattr(self, '_m_ctcss_frequency') else None
 
         @property
         def name(self):
@@ -190,6 +222,14 @@ class Tmv71Channels(KaitaiStruct):
 
             self._m_deleted = False
             return self._m_deleted if hasattr(self, '_m_deleted') else None
+
+        @property
+        def tx_step(self):
+            if hasattr(self, '_m_tx_step'):
+                return self._m_tx_step if hasattr(self, '_m_tx_step') else None
+
+            self._m_tx_step = (0 if self.tx_step_raw == 255 else self.tx_step_raw)
+            return self._m_tx_step if hasattr(self, '_m_tx_step') else None
 
 
     class ChannelFlags(KaitaiStruct):
@@ -208,6 +248,49 @@ class Tmv71Channels(KaitaiStruct):
             self.split = self._io.read_bits_int(1) != 0
             self.shift = self._root.ShiftDirection(self._io.read_bits_int(2))
 
+
+    class Tables(KaitaiStruct):
+        def __init__(self, _io, _parent=None, _root=None):
+            self._io = _io
+            self._parent = _parent
+            self._root = _root if _root else self
+            self._read()
+
+        def _read(self):
+            pass
+
+        @property
+        def step_size(self):
+            if hasattr(self, '_m_step_size'):
+                return self._m_step_size if hasattr(self, '_m_step_size') else None
+
+            self._m_step_size = [5, 6.25, 28.33, 10, 12.5, 15, 20, 25, 30, 50, 100]
+            return self._m_step_size if hasattr(self, '_m_step_size') else None
+
+        @property
+        def tone_frequency(self):
+            if hasattr(self, '_m_tone_frequency'):
+                return self._m_tone_frequency if hasattr(self, '_m_tone_frequency') else None
+
+            self._m_tone_frequency = [67, 69.3, 71.9, 74.4, 77, 79.7, 82.5, 85.4, 88.5, 91.5, 94.8, 97.4, 100, 103.5, 107.2, 110.9, 114.8, 118.8, 123, 127.3, 131.8, 136.5, 141.3, 146.2, 151.4, 156.7, 162.2, 167.9, 173.8, 179.9, 186.2, 192.8, 203.5, 240.7, 210.7, 218.1, 225.7, 229.1, 233.6, 241.8, 250.3, 254.1]
+            return self._m_tone_frequency if hasattr(self, '_m_tone_frequency') else None
+
+        @property
+        def dcs_code(self):
+            if hasattr(self, '_m_dcs_code'):
+                return self._m_dcs_code if hasattr(self, '_m_dcs_code') else None
+
+            self._m_dcs_code = [23, 25, 26, 31, 32, 36, 43, 47, 51, 53, 54, 65, 71, 72, 73, 74, 114, 115, 116, 122, 125, 131, 132, 134, 143, 145, 152, 155, 156, 162, 165, 172, 174, 205, 212, 223, 225, 226, 243, 244, 245, 246, 251, 252, 255, 261, 263, 265, 266, 271, 274, 306, 311, 315, 325, 331, 332, 343, 346, 351, 356, 364, 365, 371, 411, 412, 413, 423, 431, 432, 445, 446, 452, 454, 455, 462, 464, 465, 466, 503, 506, 516, 523, 565, 532, 546, 565, 606, 612, 624, 627, 631, 632, 654, 662, 664, 703, 712, 723, 731, 732, 734, 743, 754]
+            return self._m_dcs_code if hasattr(self, '_m_dcs_code') else None
+
+
+    @property
+    def tables(self):
+        if hasattr(self, '_m_tables'):
+            return self._m_tables if hasattr(self, '_m_tables') else None
+
+        self._m_tables = self._root.Tables(self._io, self, self._root)
+        return self._m_tables if hasattr(self, '_m_tables') else None
 
     @property
     def channels(self):

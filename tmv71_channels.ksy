@@ -18,6 +18,8 @@ seq:
     contents: [0x00, 0x4b]
 
 instances:
+  tables:
+    type: tables
   channels:
     pos: 0x1700
     type: channel(_index)
@@ -44,6 +46,29 @@ instances:
     repeat-expr: 1000
 
 types:
+  tables:
+    instances:
+      step_size:
+        value: >-
+          [5, 6.25, 28.33, 10, 12.5, 15, 20, 25, 30, 50, 100]
+      tone_frequency:
+        value: >-
+          [67, 69.3, 71.9, 74.4, 77, 79.7, 82.5, 85.4, 88.5, 91.5,
+          94.8, 97.4, 100, 103.5, 107.2, 110.9, 114.8, 118.8, 123,
+          127.3, 131.8, 136.5, 141.3, 146.2, 151.4, 156.7, 162.2,
+          167.9, 173.8, 179.9, 186.2, 192.8, 203.5, 240.7, 210.7,
+          218.1, 225.7, 229.1, 233.6, 241.8, 250.3, 254.1]
+      dcs_code:
+        value: >-
+          [23, 25, 26, 31, 32, 36, 43, 47, 51, 53, 54, 65, 71, 72, 73,
+           74, 114, 115, 116, 122, 125, 131, 132, 134, 143, 145, 152,
+           155, 156, 162, 165, 172, 174, 205, 212, 223, 225, 226, 243,
+           244, 245, 246, 251, 252, 255, 261, 263, 265, 266, 271, 274,
+           306, 311, 315, 325, 331, 332, 343, 346, 351, 356, 364, 365,
+           371, 411, 412, 413, 423, 431, 432, 445, 446, 452, 454, 455,
+           462, 464, 465, 466, 503, 506, 516, 523, 565, 532, 546, 565,
+           606, 612, 624, 627, 631, 632, 654, 662, 664, 703, 712, 723,
+           731, 732, 734, 743, 754]
   channel:
     doc: |
       A channel encoded in the radio memory.
@@ -104,22 +129,22 @@ types:
       `channel_names` array, and some extended flags from the
       `channel_extended_flags` array.
     seq:
-      - id: rx_step
+      - id: rx_step_raw
         type: u1
       - id: mod
         type: u1
         enum: modulation
       - id: flags
         type: channel_flags
-      - id: tone_frequency
+      - id: tone_frequency_raw
         type: u1
-      - id: ctcss_frequency
+      - id: ctcss_frequency_raw
         type: u1
-      - id: dcs_frequency
+      - id: dcs_code_raw
         type: u1
       - id: tx_offset_raw
         type: u4
-      - id: tx_step
+      - id: tx_step_raw
         type: u1
       - id: padding
         type: u1
@@ -130,8 +155,18 @@ types:
         value: _parent.extended_flags
       rx_freq:
         value: _parent.rx_freq_raw / 1000000.0
+      rx_step:
+        value: _root.tables.step_size[rx_step_raw]
+      tone_frequency:
+        value: _root.tables.tone_frequency[tone_frequency_raw]
+      ctcss_frequency:
+        value: _root.tables.tone_frequency[ctcss_frequency_raw]
+      dcs_code:
+        value: _root.tables.dcs_code[dcs_code_raw]
       tx_offset:
         value: tx_offset_raw / 1000000.0
+      tx_step:
+        value: "tx_step_raw == 0xff ? 0 : tx_step_raw"
       deleted:
         value: false
   extended_flag_bits:
