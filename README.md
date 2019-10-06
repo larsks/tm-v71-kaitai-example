@@ -44,15 +44,15 @@ re-generate the Python module after you make changes:
 
 ```
 $ python extract_channels.py memdump.bin
-name,rx_freq,rx_step,flags.shift,flags.split,flags.admit,mod,tone_frequency,ctcss_frequency,dcs_frequency,tx_step,extended_flags.flags.lockout
-MRABEL,145.430,5,down,False,ctcss,fm,146.20,146.20,023,0,False
-MRABBY,146.820,5,down,False,tone,fm,146.20,88.50,023,0,False
-MRAQCY,146.670,5,down,False,ctcss,fm,146.20,146.20,023,0,False
-MRALWL,442.250,25,up,False,tone,fm,88.50,88.50,023,0,False
-MRAMRW,449.925,5,down,False,ctcss,fm,88.50,88.50,023,0,False
-MRAWES,442.700,5,up,False,ctcss,fm,88.50,88.50,023,0,False
-WRA2M,146.640,5,down,False,ctcss,fm,136.50,136.50,023,0,False
-WRA70C,449.075,5,down,False,tone,fm,88.50,88.50,023,0,False
-CWA 2M,145.110,5,down,False,tone,fm,110.90,88.50,023,0,False
-CWA70C,447.575,5,down,False,tone,fm,110.90,88.50,023,0,False
+name,rx_freq,rx_step,flags.shift,flags.split,flags.admit,mod,tone_frequency,ctcss_frequency,dcs_code,tx_step,extended_flags.flags.lockout
+MRABEL,145.430,5.00,down,False,ctcss,fm,146.20,146.20,023,0,False
+MRABBY,146.820,5.00,down,False,tone,fm,146.20,88.50,023,0,False
+MRAQCY,146.670,5.00,down,False,ctcss,fm,146.20,146.20,023,0,False
+MRALWL,442.250,25.00,up,False,tone,fm,88.50,88.50,023,0,False
+MRAMRW,449.925,5.00,down,False,ctcss,fm,88.50,88.50,023,0,False
+MRAWES,442.700,5.00,up,False,ctcss,fm,88.50,88.50,023,0,False
+WRA2M,146.640,5.00,down,False,ctcss,fm,136.50,136.50,023,0,False
+WRA70C,449.075,5.00,down,False,tone,fm,88.50,88.50,023,0,False
+CWA 2M,145.110,5.00,down,False,tone,fm,110.90,88.50,023,0,False
+CWA70C,447.575,5.00,down,False,tone,fm,110.90,88.50,023,0,False
 ```
