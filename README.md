@@ -11,7 +11,12 @@ memory dump and emit the list as a CSV file.
 
 This assumes that you have a TM-V71 memory dump in a file named `memdump.bin`.
 There is an example `memdump.bin` included in this repository that you can use
-for testing.
+for testing.  You can produce a memory dump from your own radio by using
+[tm-v71-tools][] and running:
+
+    tmv71 memory read -o memdump.bin
+
+[tm-v71-tools]: https://github.com/larsks/tm-v71-tools
 
 Set up a Python virtual environment:
 
