@@ -10,9 +10,8 @@ memory dump and emit the list as a CSV file.
 ## Running the example
 
 This assumes that you have a TM-V71 memory dump in a file named `memdump.bin`.
-There is an example `memdump.bin` included in this repository that is not a
-complete memory dump, but it does have data at the locations expected by this
-code.
+There is an example `memdump.bin` included in this repository that you can use
+for testing.
 
 Set up a Python virtual environment:
 
