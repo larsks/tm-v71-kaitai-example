@@ -101,7 +101,7 @@ types:
         value: _root.channel_extended_flags[number]
   channel_flags:
     doc: |
-      These flags are included in bit 6 of the channel entry.
+      These flags are included in byte 6 of the channel entry.
     seq:
       - id: unknown
         type: b1
